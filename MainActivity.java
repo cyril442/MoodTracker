@@ -26,10 +26,13 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
 
-    private static final String TAG = "Main Activity" ;
+    private static final String TAG = "Main Activity";
+    private final static int DElTA_MIN = 50;
 
+    int compteur = 0;
     private ImageView mWelcomeSmiley;
     private ImageButton mHistory;
+    private TextView mCounter;
     private ImageButton mComment;
 
 
@@ -38,31 +41,48 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private Context context = this;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // gestureDetector = new SwipeGestureDetector(this);
+
+
         mWelcomeSmiley = (ImageView) findViewById(R.id.welcome_smiley);
+        mCounter = (TextView) findViewById(R.id.counter);
         mHistory = (ImageButton) findViewById(R.id.history);
         mComment = (ImageButton) findViewById(R.id.comment);
 
 
-        mGestureDetector = new GestureDetector(this,this);
+        //mHistory.setOnTouchListener(this);
+        mGestureDetector = new GestureDetector(this, this);
 
+        //mComment.setOnTouchListener(this);
         mWelcomeSmiley.setOnTouchListener(this);
 
 
+        mWelcomeSmiley.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // compteur = ++compteur;
+                // mCounter.setText(Integer.toString(compteur));
+                // System.out.println(compteur);
+
+
+            }
+        });
 
         // CLIC SUR HISTORY
         mHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
-               startActivity(historyActivityIntent);
-
+                // compteur = --compteur;
+                // mCounter.setText(Integer.toString(compteur));
+                // mWelcomeSmiley.setImageResource(R.drawable.smiley_sad);
+                //System.out.println(compteur);
+                Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(historyActivityIntent);
 
 
             }
@@ -106,51 +126,69 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.d(TAG, "Ondown : called" );
+        Log.d(TAG, "Ondown : called");
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
-        Log.d(TAG, "OnShowPress: called" );
+        Log.d(TAG, "OnShowPress: called");
 
 
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.d(TAG, "OnSingleTap: called" );
+        Log.d(TAG, "OnSingleTap: called");
         return false;
     }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG, "OnScroll: called" );
+        Log.d(TAG, "OnScroll: called");
         return false;
     }
 
     @Override
     public void onLongPress(MotionEvent e) {
-        Log.d(TAG, "OnLongPress: called" );
+        Log.d(TAG, "OnLongPress: called");
 
     }
 
     @Override
-    // OnFling to get a swipe Up and down information to collect and to treat
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.d(TAG, "OnFling: called" );
 
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d(TAG, "OnFling: called");
+        //Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
+        //startActivity(historyActivityIntent);
 
         float DeltaY = e2.getY() - e1.getY();
 
-        if (DeltaY >= 0){
-            Log.i(TAG, "Up");
-        } else {
-            Log.i(TAG, "Down");
+        if (Math.abs(DeltaY) > DElTA_MIN) {
+            if (DeltaY > 0) {
+                Log.d(TAG, "OnFling: up");
+                mCounter.setText("up");
+                return true;
+
+            } else {
+                Log.d(TAG, "OnFling: down");
+                mCounter.setText("down");
+                return true;
+            }
         }
+
 
         return false;
     }
+
+    // @Override
+    // public boolean dispatchTouchEvent(MotionEvent event) {
+    //    return gestureDetector.onTouchEvent(event);
+    //  }
+
+    //public void onSwipe(SwipeGestureDetector.SwipeDirection TOP_TO_BOTTOM) {
+    //   System.out.println("droite gauche");
+    // }
 
 
 }

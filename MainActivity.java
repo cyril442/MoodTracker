@@ -27,10 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private static final String TAG = "Main Activity" ;
-    int compteur = 0;
+
     private ImageView mWelcomeSmiley;
     private ImageButton mHistory;
-    private TextView mCounter;
     private ImageButton mComment;
 
 
@@ -45,43 +44,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // gestureDetector = new SwipeGestureDetector(this);
-
-
-
         mWelcomeSmiley = (ImageView) findViewById(R.id.welcome_smiley);
-        mCounter = (TextView) findViewById(R.id.counter);
         mHistory = (ImageButton) findViewById(R.id.history);
         mComment = (ImageButton) findViewById(R.id.comment);
 
 
-        //mHistory.setOnTouchListener(this);
         mGestureDetector = new GestureDetector(this,this);
 
-        //mComment.setOnTouchListener(this);
         mWelcomeSmiley.setOnTouchListener(this);
 
 
-
-        mWelcomeSmiley.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // compteur = ++compteur;
-                // mCounter.setText(Integer.toString(compteur));
-                // System.out.println(compteur);
-
-
-            }
-        });
 
         // CLIC SUR HISTORY
         mHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // compteur = --compteur;
-                // mCounter.setText(Integer.toString(compteur));
-                // mWelcomeSmiley.setImageResource(R.drawable.smiley_sad);
-                //System.out.println(compteur);
+
                Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
                startActivity(historyActivityIntent);
 
@@ -158,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
-
+    // OnFling to get a swipe Up and down information to collect and to treat
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         Log.d(TAG, "OnFling: called" );
 
@@ -171,19 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.i(TAG, "Down");
         }
 
-
-
         return false;
     }
-
-    // @Override
-   // public boolean dispatchTouchEvent(MotionEvent event) {
-   //    return gestureDetector.onTouchEvent(event);
-  //  }
-
-    //public void onSwipe(SwipeGestureDetector.SwipeDirection TOP_TO_BOTTOM) {
-     //   System.out.println("droite gauche");
-   // }
 
 
 }

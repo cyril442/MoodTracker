@@ -1,9 +1,12 @@
 package com.example.android.moodtracker;
 
+import android.app.usage.UsageEvents;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -13,22 +16,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
+
+    private static final String TAG = "Main Activity" ;
     int compteur = 0;
     private ImageView mWelcomeSmiley;
     private ImageButton mHistory;
     private TextView mCounter;
     private ImageButton mComment;
 
-    private SwipeGestureDetector gestureDetector;
 
+    private GestureDetector mGestureDetector;
 
     private Context context = this;
 
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gestureDetector = new SwipeGestureDetector(this);
+       // gestureDetector = new SwipeGestureDetector(this);
 
 
 
@@ -49,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
         mComment = (ImageButton) findViewById(R.id.comment);
 
 
+        //mHistory.setOnTouchListener(this);
+        mGestureDetector = new GestureDetector(this,this);
 
+        //mComment.setOnTouchListener(this);
+        mWelcomeSmiley.setOnTouchListener(this);
 
 
 
@@ -72,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 // mCounter.setText(Integer.toString(compteur));
                 // mWelcomeSmiley.setImageResource(R.drawable.smiley_sad);
                 //System.out.println(compteur);
-                Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
-                startActivity(historyActivityIntent);
+               Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
+               startActivity(historyActivityIntent);
 
 
 
@@ -111,13 +121,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        mGestureDetector.onTouchEvent(motionEvent);
+        return false;
     }
 
-    public void onSwipe(SwipeGestureDetector.SwipeDirection TOP_TO_BOTTOM) {
-        System.out.println("droite gauche");
+    @Override
+    public boolean onDown(MotionEvent e) {
+        Log.d(TAG, "Ondown : called" );
+        return false;
     }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        Log.d(TAG, "OnShowPress: called" );
+
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        Log.d(TAG, "OnSingleTap: called" );
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d(TAG, "OnScroll: called" );
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        Log.d(TAG, "OnLongPress: called" );
+
+    }
+
+    @Override
+
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d(TAG, "OnFling: called" );
+
+
+        float DeltaY = e2.getY() - e1.getY();
+
+        if (DeltaY >= 0){
+            Log.i(TAG, "Up");
+        } else {
+            Log.i(TAG, "Down");
+        }
+
+
+
+        return false;
+    }
+
+    // @Override
+   // public boolean dispatchTouchEvent(MotionEvent event) {
+   //    return gestureDetector.onTouchEvent(event);
+  //  }
+
+    //public void onSwipe(SwipeGestureDetector.SwipeDirection TOP_TO_BOTTOM) {
+     //   System.out.println("droite gauche");
+   // }
 
 
 }
